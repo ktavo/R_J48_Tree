@@ -85,15 +85,15 @@ for (i in 1:hasta){
 
 
 
-tiff(filename="4_Tamanio_vs_MinNumObj.jpeg",units="in",width=6.5,height=4,res=300,compression='lzw')
+tiff(filename="3_Tamanio_vs_CF.jpeg",units="in",width=6.5,height=4,res=300,compression='lzw')
 ggplot(df_punto_4, 
        aes(M_porcentaje, Size_tree)) + 
   geom_line(color='dark blue') + 
   geom_point(color='dark blue') + 
   theme_minimal() +
-  xlab("Porcentaje aplicado para el mínimo número de elementos en las hojas") + 
+  xlab("Porcentaje aplicado para el Confidence Factor") + 
   ylab("Tamaño del árbol") + 
-  ggtitle("Tamaño según variación del MínNumObj")+
+  ggtitle("Tamaño según variación del CF")+
   theme_linedraw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -103,15 +103,15 @@ dev.off()
 df_graf<-rbind(data.frame(df_punto_4[,c(1:3)],Performance=df_punto_4[,4],Base=rep("Train",20)),
                data.frame(df_punto_4[,c(1:3)],Performance=df_punto_4[,8],Base=rep("Test",20)))
 
-tiff(filename="4_Accuracy_vs_MinNumObj.jpeg",units="in",width=6.5,height=4,res=300,compression='lzw')
+tiff(filename="3_Accuracy_vs_CF.jpeg",units="in",width=6.5,height=4,res=300,compression='lzw')
 ggplot(df_graf, 
        aes(M_porcentaje, Performance, group = Base, color = Base)) + 
   geom_line() + 
   geom_point() + 
   theme_minimal() +
-  xlab("Porcentaje aplicado para el mínimo número de elementos en las hojas") + 
+  xlab("Porcentaje aplicado para el Confidence Factor") + 
   ylab("Tamaño del árbol") + 
-  ggtitle("Accuracy según variación del MínNumObj")+
+  ggtitle("Accuracy según variación del CF")+
   theme_linedraw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -119,7 +119,7 @@ ggplot(df_graf,
 dev.off()
 
 write.table(x = df_punto_4,
-            file = "Resultados_punto_4_MinNumObj.csv", 
+            file = "Resultados_punto_3_CF.csv", 
             sep = ",", 
             quote = FALSE,
             row.names = FALSE)
