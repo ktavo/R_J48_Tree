@@ -2,7 +2,7 @@
 
 rm(list=ls())
 
-setwd("C:/Users/remba/Documents/Maestría DM/AA/TP1/Final/R/4")
+setwd("E:/UBA/Aprendizaje Automático/TP1/Árboles Punto 6")
 a_train_original_data <- "train_original.csv"
 a_test_original_data <- "test_original.csv"
 library("RWeka")
