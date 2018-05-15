@@ -47,7 +47,7 @@ prof<-depth(p)
 
 datos_train<-length(df_train_original$y)
 M_porc<-list(seq(0.05,0.5,0.05))
-M_par<-lapply(datos_train*seq(0.05,0.5,0.05),floor)
+M_par<-lapply(1*seq(0.05,0.5,0.05),identity)
 hasta<-length(M_par)
 #Genero los árboles
 
@@ -55,7 +55,7 @@ hasta<-length(M_par)
 
 
 for (i in 1:hasta){
-  tree_train<-J48(as.factor(y)~., df_train_original,control=Weka_control(M=M_par[i],C=0.25))
+  tree_train<-J48(as.factor(y)~., df_train_original,control=Weka_control(M=2,C=M_par[i]))
   validacion_test<-evaluate_Weka_classifier(tree_train,newdata=df_test_original)
   p <- as.party(tree_train)
   
@@ -91,7 +91,7 @@ ggplot(df_punto_3,
   geom_line(color='dark blue') + 
   geom_point(color='dark blue') + 
   theme_minimal() +
-  xlab("Porcentaje aplicado para el Confidence Factor") + 
+  xlab("Porcentaje del Confidence Factor") + 
   ylab("Tamaño del árbol") + 
   ggtitle("Tamaño según variación del CF")+
   theme_linedraw() +
@@ -109,8 +109,8 @@ ggplot(df_graf,
   geom_line() + 
   geom_point() + 
   theme_minimal() +
-  xlab("Porcentaje aplicado para el Confidence Factor") + 
-  ylab("Tamaño del árbol") + 
+  xlab("Porcentaje del Confidence Factor") + 
+  ylab("Accuracy") + 
   ggtitle("Accuracy según variación del CF")+
   theme_linedraw() +
   theme(panel.grid.major = element_blank(),
