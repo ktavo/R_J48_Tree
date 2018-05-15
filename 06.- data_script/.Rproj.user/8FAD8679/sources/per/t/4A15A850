@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1524740806692.000,
+    "dirty" : false,
+    "encoding" : "WINDOWS-1252",
+    "folds" : "",
+    "hash" : "730435051",
+    "id" : "4A15A850",
+    "lastKnownWriteTime" : 1524741683,
+    "last_content_update" : 1524741683495,
+    "path" : "C:/Users/clupi/Desktop/06.- data_script/06.- data_script.R",
+    "project_path" : "06.- data_script.R",
+    "properties" : {
+        "cursorPosition" : "48,2",
+        "scrollLine" : "31"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
