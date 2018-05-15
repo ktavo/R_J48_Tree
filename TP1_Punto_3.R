@@ -46,8 +46,8 @@ prof<-depth(p)
 #Genera el árbol con la base de TRAIN
 
 datos_train<-length(df_train_original$y)
-M_porc<-list(seq(0.005,0.1,0.005))
-M_par<-lapply(datos_train*seq(0.005,0.1,0.005),floor)
+M_porc<-list(seq(0.05,0.5,0.05))
+M_par<-lapply(datos_train*seq(0.05,0.5,0.05),floor)
 hasta<-length(M_par)
 #Genero los árboles
 
@@ -60,7 +60,7 @@ for (i in 1:hasta){
   p <- as.party(tree_train)
   
     if (i==1) {
-    df_punto_4 <- data.frame(Corrida=i,
+    df_punto_3 <- data.frame(Corrida=i,
                                     M_porcentaje=M_porc[[1]][i],
                                    M_num=M_par[[i]],
                                    Performance_train=summary(tree_train)$details[1],
@@ -69,7 +69,7 @@ for (i in 1:hasta){
                                    Prof_Tree=depth(p),
                                    Performance_test=validacion_test$details[1])
     } else {
-  df_punto_4 <- rbind(df_punto_4,
+  df_punto_3 <- rbind(df_punto_3,
                                   data.frame(
                                   Corrida=i,
                                   M_porcentaje=M_porc[[1]][i],
@@ -86,7 +86,7 @@ for (i in 1:hasta){
 
 
 tiff(filename="3_Tamanio_vs_CF.jpeg",units="in",width=6.5,height=4,res=300,compression='lzw')
-ggplot(df_punto_4, 
+ggplot(df_punto_3, 
        aes(M_porcentaje, Size_tree)) + 
   geom_line(color='dark blue') + 
   geom_point(color='dark blue') + 
@@ -100,8 +100,8 @@ ggplot(df_punto_4,
         plot.title = element_text(hjust = 0.5))
 dev.off()
 
-df_graf<-rbind(data.frame(df_punto_4[,c(1:3)],Performance=df_punto_4[,4],Base=rep("Train",20)),
-               data.frame(df_punto_4[,c(1:3)],Performance=df_punto_4[,8],Base=rep("Test",20)))
+df_graf<-rbind(data.frame(df_punto_3[,c(1:3)],Performance=df_punto_3[,4],Base=rep("Train",20)),
+               data.frame(df_punto_3[,c(1:3)],Performance=df_punto_3[,8],Base=rep("Test",20)))
 
 tiff(filename="3_Accuracy_vs_CF.jpeg",units="in",width=6.5,height=4,res=300,compression='lzw')
 ggplot(df_graf, 
@@ -118,7 +118,7 @@ ggplot(df_graf,
         plot.title = element_text(hjust = 0.5))
 dev.off()
 
-write.table(x = df_punto_4,
+write.table(x = df_punto_3,
             file = "Resultados_punto_3_CF.csv", 
             sep = ",", 
             quote = FALSE,
