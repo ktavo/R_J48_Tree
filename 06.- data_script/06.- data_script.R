@@ -4,6 +4,10 @@
 
 # Borramos todos los objetos.
 rm(list=ls())
+setwd("E:/UBA/Aprendizaje Automático/TP1/Árboles Punto 6/06.- data_script")
+
+
+
 options(warn=-1)  #Suprimimos los Warnings
 
 a_train_original_data <- "train_original.csv"
