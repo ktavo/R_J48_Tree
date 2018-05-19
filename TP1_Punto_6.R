@@ -165,7 +165,7 @@
   
   list_test_ruido$M_porcentaje<-as.factor(list_test_ruido$M_porcentaje)
   
-  ggplot(list_test_ruido, 
+  ggplot(list_test_ruido[list_test_ruido$M_porcentaje %in% c('0.1','0.2','0.3','0.4','0.5'),], 
          aes(Noise_Percentage, Performance_train, group =M_porcentaje, color = M_porcentaje)) + 
     geom_line() + 
     geom_point() + 
@@ -174,7 +174,7 @@
     ylab("Performance") +  
     ggtitle("Performance Train con Ruido ")
   
-  ggplot(list_test_ruido, 
+  ggplot(list_test_ruido[list_test_ruido$M_porcentaje %in% c('0.1','0.2','0.3','0.4','0.5'),], 
          aes(Noise_Percentage, Performance_test, group =M_porcentaje, color = M_porcentaje)) + 
     geom_line() + 
     geom_point() + 
