@@ -6,6 +6,7 @@
   
   library("RWeka")
   library("partykit")
+  library("ggplot2")
   #install.packages("libcoin")
   
   #Cargo datos de test
@@ -23,12 +24,14 @@
   # Cantidad de archivos a generar por tipo de ruido.
   N <- round((porc_max_ruido - porc_min_ruido) /  porc_step_ruido, 0)
   
+  noise_level <- 35
+  
   for (i in 0:3){
   
   
   }  
   #Cargo datos de train
-  nombre_train_set <- paste("06.- data_script/dataset_ruido_",1,"_.csv", sep = "")
+  nombre_train_set <- paste("06.- data_script/dataset_ruido_",noise_level,"_.csv", sep = "")
   a_train_ruido_data <- nombre_train_set
   df_train_ruido <- read.csv(a_train_ruido_data, 
                                 header = TRUE, 
@@ -77,17 +80,7 @@
     p <- as.party(tree_train)
     
     if (i==1) {
-      df_punto_6 <- data.frame(Corrida=i,
-                               M_porcentaje=M_porc[[1]][i],
-                               M_num=M_par[[i]],
-                               Performance_train=summary(tree_train)$details[1],
-                               Size_tree=width(p),
-                               Num_leaves=length(p),
-                               Prof_Tree=depth(p),
-                               Performance_test=validacion_test$details[1])
-    } else {
-      df_punto_6 <- rbind(df_punto_6,
-                          data.frame(
+      df_punto_6 <- data.frame(
                             Corrida=i,
                             M_porcentaje=M_porc[[1]][i],
                             M_num=M_par[[i]],
@@ -96,11 +89,24 @@
                             Num_leaves=length(p),
                             Prof_Tree=depth(p),
                             Performance_test=validacion_test$details[1],
+                            Noise_Percentage = noise_level)
+    } else {
+      df_punto_6 <- rbind(df_punto_6,
+                    data.frame(
+                            Corrida=i,
+                            M_porcentaje=M_porc[[1]][i],
+                            M_num=M_par[[i]],
+                            Performance_train=summary(tree_train)$details[1],
+                            Size_tree=width(p),
+                            Num_leaves=length(p),
+                            Prof_Tree=depth(p),
+                            Performance_test=validacion_test$details[1],
+                            Noise_Percentage = noise_level,
                             check.names=FALSE))
     }
   }
   
-  nombre_grafico_tamanio <- paste("6_Tamanio_vs_CF_",1,".jpeg", sep = "")
+  nombre_grafico_tamanio <- paste("6_Tamanio_vs_CF_",noise_level,".jpeg", sep = "")
   
   tiff(filename= nombre_grafico_tamanio, units="in",width=6.5,height=4,res=300,compression='lzw')
   ggplot(df_punto_6, 
@@ -110,7 +116,7 @@
     theme_minimal() +
     xlab("Porcentaje del Confidence Factor") + 
     ylab("Tamaño del árbol") + 
-    ggtitle("Tamaño según variación del CF")+
+    ggtitle(paste("Tamaño según variación del CF", "Noise %", noise_level))+
     theme_linedraw() +
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
@@ -120,7 +126,7 @@
   df_graf<-rbind(data.frame(df_punto_6[,c(1:3)],Performance=df_punto_6[,4],Base=rep("Train",20)),
                  data.frame(df_punto_6[,c(1:3)],Performance=df_punto_6[,8],Base=rep("Test",20)))
   
-  nombre_grafico_accuracy <- paste("6 _Accuracy_vs_CF_",1,".jpeg", sep = "")
+  nombre_grafico_accuracy <- paste("6 _Accuracy_vs_CF_",noise_level,".jpeg", sep = "")
   
   tiff(filename= nombre_grafico_accuracy ,units="in",width=6.5,height=4,res=300,compression='lzw')
   ggplot(df_graf, 
@@ -130,15 +136,51 @@
     theme_minimal() +
     xlab("Porcentaje del Confidence Factor") + 
     ylab("Accuracy") + 
-    ggtitle("Accuracy según variación del CF")+
+    ggtitle(paste("Accuracy según variación del CF","Noise %",noise_level))+
     theme_linedraw() +
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           plot.title = element_text(hjust = 0.5))
   dev.off()
   
-  #write.table(x = df_punto_6,
-  #           file = "Resultados_punto_6_CF.csv", 
-  #            sep = ",", 
-  #            quote = FALSE,
-  #            row.names = FALSE)
+  write.table(x = df_punto_6,
+             file = "Resultados_punto_6_CF.csv", 
+             sep = ",", 
+             quote = FALSE,
+             append = TRUE,
+             row.names = FALSE,
+             col.names = FALSE)
+
+  #############################Gráficos###############################################3
+  rm(list=ls())
+  setwd("E:/UBA/Aprendizaje Automático/TP1/Árboles Punto 6")
+  
+  test_ruido_data <- "Resultados_punto_6_CF.csv"
+  list_test_ruido <- read.csv(test_ruido_data, 
+                               header = TRUE, 
+                               sep = ",", 
+                               colClasses=c('numeric','numeric','numeric','numeric','numeric','numeric','numeric','numeric','numeric'), 
+                               check.names = FALSE)
+  
+  
+  list_test_ruido$M_porcentaje<-as.factor(list_test_ruido$M_porcentaje)
+  
+  ggplot(list_test_ruido, 
+         aes(Noise_Percentage, Performance_train, group =M_porcentaje, color = M_porcentaje)) + 
+    geom_line() + 
+    geom_point() + 
+    theme_minimal() +
+    xlab("Porcentaje Faltantes") + 
+    ylab("Performance") +  
+    ggtitle("Performance Train con Ruido ")
+  
+  ggplot(list_test_ruido, 
+         aes(Noise_Percentage, Performance_test, group =M_porcentaje, color = M_porcentaje)) + 
+    geom_line() + 
+    geom_point() + 
+    theme_minimal() +
+    xlab("Porcentaje Faltantes") + 
+    ylab("Performance") +  
+    ggtitle("Performance Test con Ruido ")
+  
+  

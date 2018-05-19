@@ -61,7 +61,7 @@ for (i in 1:hasta){
   
     if (i==1) {
     df_punto_3 <- data.frame(Corrida=i,
-                                    M_porcentaje=M_porc[[1]][i],
+                                   M_porcentaje=M_porc[[1]][i],
                                    M_num=M_par[[i]],
                                    Performance_train=summary(tree_train)$details[1],
                                    Size_tree=width(p),
@@ -70,8 +70,7 @@ for (i in 1:hasta){
                                    Performance_test=validacion_test$details[1])
     } else {
   df_punto_3 <- rbind(df_punto_3,
-                                  data.frame(
-                                  Corrida=i,
+                  data.frame(Corrida=i,
                                   M_porcentaje=M_porc[[1]][i],
                                   M_num=M_par[[i]],
                                   Performance_train=summary(tree_train)$details[1],
